@@ -101,8 +101,6 @@ fun calcTransferFee(typeCard: String, sumTransferMonth: Int = 0, currentTransfer
         return 0
     }
     val sumForCommission = currentTransfer - 0.coerceAtLeast(freeLimit - sumTransferMonth)
-    println("sumMonth: $sumTransferMonth, current: $currentTransfer")
-    println("sumForCommission: $sumForCommission")
     return when (typeCard) {
         "MasterCard" -> (sumForCommission * taxMC).toInt() + 20
         "Visa" -> 35.coerceAtLeast((sumForCommission * taxVisa).toInt())
