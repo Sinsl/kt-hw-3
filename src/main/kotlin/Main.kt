@@ -45,13 +45,13 @@ fun task2() {
     var sumTransferMonthVisa = 0
     var sumTransferMonthMC = 0
 
-    sumTransferMonthMir += checkTransfer(sumTransferMonth = sumTransferMonthMir, currentTransfer = 60_000)
-    sumTransferMonthMir += checkTransfer(sumTransferMonth = sumTransferMonthMir, currentTransfer = 150_000)
-    sumTransferMonthMir += checkTransfer(sumTransferMonth = sumTransferMonthMir, currentTransfer = 150_000)
-    sumTransferMonthMir += checkTransfer(sumTransferMonth = sumTransferMonthMir, currentTransfer = 150_000)
-    printBalans(sumTransferMonthMir, sumTransferMonthVisa, sumTransferMonthMC)
-    sumTransferMonthMir += checkTransfer(sumTransferMonth = sumTransferMonthMir, currentTransfer = 100_000)
-    printBalans(sumTransferMonthMir, sumTransferMonthVisa, sumTransferMonthMC)
+//    sumTransferMonthMir += checkTransfer(sumTransferMonth = sumTransferMonthMir, currentTransfer = 60_000)
+//    sumTransferMonthMir += checkTransfer(sumTransferMonth = sumTransferMonthMir, currentTransfer = 150_000)
+//    sumTransferMonthMir += checkTransfer(sumTransferMonth = sumTransferMonthMir, currentTransfer = 150_000)
+//    sumTransferMonthMir += checkTransfer(sumTransferMonth = sumTransferMonthMir, currentTransfer = 150_000)
+//    printBalans(sumTransferMonthMir, sumTransferMonthVisa, sumTransferMonthMC)
+//    sumTransferMonthMir += checkTransfer(sumTransferMonth = sumTransferMonthMir, currentTransfer = 100_000)
+//    printBalans(sumTransferMonthMir, sumTransferMonthVisa, sumTransferMonthMC)
 
     sumTransferMonthVisa += checkTransfer("Visa", sumTransferMonth = sumTransferMonthVisa, currentTransfer = 20_000)
     sumTransferMonthVisa += checkTransfer("Visa", sumTransferMonth = sumTransferMonthVisa, currentTransfer = 45_000)
@@ -94,16 +94,16 @@ fun calcTransferFee(typeCard: String, sumTransferMonth: Int = 0, currentTransfer
     val freeLimit = 75_000
     val taxMC = 0.006
     val taxVisa = 0.0075
-    if (typeCard == "Mir") {
-        return 0
-    }
-    if (sumTransferMonth + currentTransfer < freeLimit) {
-        return 0
-    }
-    val sumForCommission = currentTransfer - 0.coerceAtLeast(freeLimit - sumTransferMonth)
+
     return when (typeCard) {
-        "MasterCard" -> (sumForCommission * taxMC).toInt() + 20
-        "Visa" -> 35.coerceAtLeast((sumForCommission * taxVisa).toInt())
+        "MasterCard" -> {
+            if (sumTransferMonth + currentTransfer < freeLimit) {
+                return 0
+            }
+            val sumForCommission = currentTransfer - 0.coerceAtLeast(freeLimit - sumTransferMonth)
+            return (sumForCommission * taxMC).toInt() + 20
+        }
+        "Visa" -> 35.coerceAtLeast((currentTransfer * taxVisa).toInt())
         else -> 0
     }
 }
